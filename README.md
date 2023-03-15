@@ -11,7 +11,7 @@ Alternatively use the [nnU-Net by Fabian Isensee et al.](https://github.com/MIC-
   
 
 ACDC Classes in images by color:  
-Yellow: LV cavity  
-Green: Myocardium  
-Blue: RV cavity  
+Yellow: LV cavity     // Value = 3; inside
+Green: Myocardium     // Value = 2; transition
+Blue: RV cavity       // Value = 1; outside
 (Purple: Background)  
