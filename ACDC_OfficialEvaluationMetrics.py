@@ -344,6 +344,7 @@ if __name__ == "__main__":
     # Example cmd call: "python filename.py <gtLabel> <predictedLabel>"
     # python ACDC_OfficialEvaluationMetrics.py output/patient041_gtLabel_2D/patient041_frame01_2D_seg.nii.gz output/patient041_frame01_2D/patient041_frame01_gt_2D.nii.gz
 
+    # Use metrics in .csv to plot a boxplot per ACDC class. Also print the average Dice Score and save the file as .pdf (vectorized)
     boxplot_from_csv_metrics()
 
     # Individual boxplot (Vorsicht! So ist Segresnet_data eine list of 10 lists with length 3 each. dice_metric_matrix ist aber ein numpyarray mit Shape (10,3).)
