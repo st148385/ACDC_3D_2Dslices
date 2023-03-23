@@ -1,6 +1,6 @@
 Train 2D models for 3D segmentation using 2D Slices of 3D ACDC NIfTI files (.nii.gz)
 
-Using [this file](https://github.com/st148385/ACDC_3D_2Dslices/blob/main/lr_Scheduling_niftiSave_Unet_ACDC_3D_2DsliceTraining_segmentation.ipynb) for training and evaluation, the first 50 ACDC 3D files are used for Training (35), Validation (5) and Testing (10) split.
+Using [this file](https://github.com/st148385/ACDC_3D_2Dslices/blob/main/lr_Scheduling_niftiSave_Unet_ACDC_3D_2DsliceTraining_segmentation.ipynb) for training and evaluation, the first 50 ACDC 3D files are used for a split of Training (35), Validation (5) and Testing (10).
 
 
 
