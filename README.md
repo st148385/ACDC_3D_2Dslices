@@ -1,7 +1,8 @@
 Train 2D models for 3D segmentation using 2D Slices of 3D ACDC NIfTI files (.nii.gz)  
 [The ACDC files](https://humanheart-project.creatis.insa-lyon.fr/database/#collection/637218c173e9f0047faa00fb) have to be downloaded to a Google Drive account first.
 
-Using [this file](https://github.com/st148385/ACDC_3D_2Dslices/blob/main/lr_Scheduling_niftiSave_Unet_ACDC_3D_2DsliceTraining_segmentation.ipynb) for training and evaluation, the first 50 ACDC 3D files are used for a split of Training (35), Validation (5) and Testing (10).
+Using [this file](https://github.com/st148385/ACDC_3D_2Dslices/blob/main/lr_Scheduling_niftiSave_Unet_ACDC_3D_2DsliceTraining_segmentation.ipynb) for training and evaluation, the first 50 ACDC 3D files are used for a split of Training (35), Validation (5) and Testing (10).  
+The Unet or Segresnet architecture should be chosen for this task.
 
 
 
