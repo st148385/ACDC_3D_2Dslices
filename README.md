@@ -1,5 +1,4 @@
-Train 2D models for 3D segmentation using 2D Slices of 3D ACDC NIfTI files (.nii.gz)
-
+Train 2D models for 3D segmentation using 2D Slices of 3D ACDC NIfTI files (.nii.gz) __
 The ACDC files have to be downloaded to a Google Drive account.
 
 Using [this file](https://github.com/st148385/ACDC_3D_2Dslices/blob/main/lr_Scheduling_niftiSave_Unet_ACDC_3D_2DsliceTraining_segmentation.ipynb) for training and evaluation, the first 50 ACDC 3D files are used for a split of Training (35), Validation (5) and Testing (10).
@@ -12,7 +11,7 @@ Alternatively use the [nnU-Net by Fabian Isensee et al.](https://github.com/MIC-
 
 
 
-ACDC Classes in images by color:  
+ACDC Classes in images by color and matrix value:  
 Yellow: LV cavity       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Value = 3; inside  
 Green: Myocardium       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Value = 2; transition  
 Blue: RV cavity         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Value = 1; outside  
