@@ -1,4 +1,4 @@
-# Editiert zur zusätzlichen Erstellung eines Boxplots aus dem .csv file
+# Edited to additionally create a boxplot from the .csv file
 """
 author: Clément Zotti (clement.zotti@usherbrooke.ca)
 date: April 2017
@@ -34,7 +34,7 @@ Link: http://acdc.creatis.insa-lyon.fr
 
 """
 
-# Beispiel cmd Aufruf: "python filename.py <gtLabel> <predictedLabel>"
+# Example cmd call: "python filename.py <gtLabel> <predictedLabel>"
 # python ACDC_OfficialEvaluationMetrics.py output/patient041_gtLabel_2D/patient041_frame01_gt_2D.nii.gz output/patient041_frame01_2D/patient041_frame01_gt_2D.nii.gz
 
 import os
@@ -46,8 +46,15 @@ import nibabel as nib
 import pandas as pd
 from medpy.metric.binary import hd, dc
 import numpy as np
-import csv  # Newly added -> To read the output .csv file
-import matplotlib.pyplot as plt    # Newly added -> To plot boxplots
+import csv  # Just to read the output .csv file
+import matplotlib.pyplot as plt    # Just to plot boxplots
+
+### edit the (box)plot font size
+import matplotlib
+font = {'family': 'serif',
+        'size': 15}
+matplotlib.rc('font', **font)
+###
 
 
 HEADER = ["Name", "Dice LV", "Volume LV", "Err LV(ml)",
@@ -254,28 +261,34 @@ def main(path_gt, path_pred):
         raise ValueError(
             "The paths given needs to be two directories or two files.")
 
+def boxplot_from_csv_metrics(csv_filename = None, PlotSaveLocation = None):
+    """
+    Prints used metrics, plots boxplot using matplotlib.pyplot and saves the boxplot to PlotSaveLocation (here the format, e.g. '.pdf', can be chosen).
 
-if __name__ == "__main__":
-    # parser = argparse.ArgumentParser(
-    #     description="Script to compute ACDC challenge metrics.")
-    # parser.add_argument("GT_IMG", type=str, help="Ground Truth image")
-    # parser.add_argument("PRED_IMG", type=str, help="Predicted image")
-    # args = parser.parse_args()
-    # main(args.GT_IMG, args.PRED_IMG)
-    GT_IMG = 'output/ACDC_GroundTruth'
-    PRED_IMG = 'output/nnUNet_Output'
-    # main(GT_IMG, PRED_IMG)    # Get the .csv file by comparing all nifti files in the folder GT_IMG to all nifti files in the folder PRED_IMG
-
-    # Beispiel cmd Aufruf: "python filename.py <gtLabel> <predictedLabel>"
-    # python ACDC_OfficialEvaluationMetrics.py output/patient041_gtLabel_2D/patient041_frame01_2D_seg.nii.gz output/patient041_frame01_2D/patient041_frame01_gt_2D.nii.gz
+    :param csv_filename: Name of .csv file in the Python file's directory to read the computed metrics from. If None, will use first .csv file found in the directory.
+    :param PlotSaveLocation: Location to save the boxplot to (example: 'Boxplot.svg'). Will be saved as "output/Boxplot_10Test3Dimages_nnUNet_baseline.pdf" on default.
+    :return: No actual returned values. """
 
     ## Get averages from .csv file and plot boxplots
     results = []
 
-    with open("results_20230315_145308.csv") as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            results.append(row)
+    # Get the path of the directory containing this Python file
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
+    if csv_filename == None:
+        # Loop through the files in the directory
+        for filename in os.listdir(dir_path):
+            # Check if the file is a .csv file
+            if filename.endswith(".csv"):
+                print(f"Found and going to use this .csv file: {os.path.join(dir_path, filename)}")
+                # Open the first .csv file found
+                with open(os.path.join(dir_path, filename)) as csvfile:
+                    reader = csv.reader(csvfile)
+                    for row in reader:
+                        results.append(row)
+                break # Stop looping through the files once the first .csv file is found
+    else:
+        print(f"Going to use your .csv file: {os.path.join(dir_path, filename)}")
 
     ## Reihenfolge im Excel file: LV, RV, Myo       // d. h. Segmentation mask value Reihenfolge = [3, 1, 2]
     # results[x][1] = Dice LV cavity
@@ -300,28 +313,38 @@ if __name__ == "__main__":
 
     print("Overall mean dice for all three classes =", np.mean(dice_metric_matrix))
 
-    ### plot font size
-    import matplotlib
-    font = {'family': 'serif',
-            'size': 15}
-    matplotlib.rc('font', **font)
-    ###
 
     # Boxplot of .csv file
     fig, ax = plt.subplots()
-    ax.boxplot([dice_metric_matrix[:,0], dice_metric_matrix[:,1], dice_metric_matrix[:,2]])  #
-    ax.set_xticklabels(['RV cavity', 'Myocardium',
-                        'LV cavity'])  # "0": "voxels in the background", "1": "voxels in the RV cavity", "2": "voxels in the myocardium", "3": "voxels in the LV cavity"
+    ax.boxplot([dice_metric_matrix[:,0], dice_metric_matrix[:,1], dice_metric_matrix[:,2]])
+    ax.set_xticklabels(['RV cavity', 'Myocardium', 'LV cavity'])  # "0": "voxels in the background", "1": "voxels in the RV cavity", "2": "voxels in the myocardium", "3": "voxels in the LV cavity"
     ax.set_ylabel('Dice score of ten 3D masks during test')
     ax.set_title("Baseline")
     plt.tight_layout()
     #ax.set_ylim(0.74,0.98)
-    PlotSaveLocation = "output/Boxplot_10Test3Dimages_nnUNet_baseline.pdf"
+    if PlotSaveLocation == None:
+        PlotSaveLocation = "output/Boxplot_10Test3Dimages_nnUNet_baseline.pdf"
     # plt.savefig(PlotSaveLocation + ".pdf")
     plt.savefig(PlotSaveLocation)
     print(f"Saved to {PlotSaveLocation}")
     plt.show()
 
+
+if __name__ == "__main__":
+    # parser = argparse.ArgumentParser(
+    #     description="Script to compute ACDC challenge metrics.")
+    # parser.add_argument("GT_IMG", type=str, help="Ground Truth image")
+    # parser.add_argument("PRED_IMG", type=str, help="Predicted image")
+    # args = parser.parse_args()
+    # main(args.GT_IMG, args.PRED_IMG)
+    GT_IMG = 'output/ACDC_GroundTruth'
+    PRED_IMG = 'output/nnUNet_Output'
+    main(GT_IMG, PRED_IMG)    # Get the .csv file by comparing all nifti files in the folder GT_IMG to all nifti files in the folder PRED_IMG
+
+    # Example cmd call: "python filename.py <gtLabel> <predictedLabel>"
+    # python ACDC_OfficialEvaluationMetrics.py output/patient041_gtLabel_2D/patient041_frame01_2D_seg.nii.gz output/patient041_frame01_2D/patient041_frame01_gt_2D.nii.gz
+
+    boxplot_from_csv_metrics()
 
     # Individual boxplot (Vorsicht! So ist Segresnet_data eine list of 10 lists with length 3 each. dice_metric_matrix ist aber ein numpyarray mit Shape (10,3).)
     Segresnet_data =   [[0.8103033,  0.7533007,  0.9147179],
@@ -342,8 +365,7 @@ if __name__ == "__main__":
 
     fig, ax = plt.subplots()
     ax.boxplot([RV_elements, Myo_elements, LV_elements])
-    ax.set_xticklabels(['RV cavity', 'Myocardium',
-                        'LV cavity'])  # "0": "voxels in the background", "1": "voxels in the RV cavity", "2": "voxels in the myocardium", "3": "voxels in the LV cavity"
+    ax.set_xticklabels(['RV cavity', 'Myocardium', 'LV cavity'])
     ax.set_ylabel('Dice score of ten 3D masks during test')
     ax.set_title('New Implementation (Segresnet)')
     plt.tight_layout()
